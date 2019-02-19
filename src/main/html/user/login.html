@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>登录</title>
+    <link href="../static/assets/global/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="../static/assets/global/css/components.css" rel="stylesheet" type="text/css">
+    <link href="../static/assets/admin/pages/css/login.css" rel="stylesheet" type="text/css">
+    <script src="../static/assets/global/plugins/jquery-1.11.0.min.js"></script>
+</head>
+<body class="login">
+<div class="content">
+    <h3 class="form-title">用户登录</h3>
+    <div class="form-group">
+        <div class="form-group">
+            <label class="control-label">用户名：</label>
+            <input type="text" name="username" id="username" placeholder="用户名" class="form-control">
+        </div>
+        <div class="form-group">
+            <label class="control-label">密码：</label>
+            <input type="password" name="password" id="password" placeholder="密码" class="form-control">
+        </div>
+        <div class="form-actions">
+            <button class="btn green" id="login" type="button">登录</button>
+            <button class="btn red" id="register" type="button">注册</button>
+        </div>
+    </div>
+</div>
+</body>
+<script type="text/javascript">
+    jQuery(document).ready(function () {
+            $("#register").on("click", function () {
+                window.location.href = "getotp.html";
+            });
+            //绑定getotp按钮的点击事件，发送获取短信验证码的请求
+            $("#login").on("click", function () {
+                var username = $("#username").val();
+                var password = $("#password").val();
+                if (username == null || username == "") {
+                    alert("用户名不能为空！");
+                    return false;
+                }
+                if (password == null || password == "") {
+                    alert("密码不能为空！");
+                    return false;
+                }
+                $.ajax({
+                    url: "http://localhost:8000/user/login",
+                    type: "post",
+                    contentType: "application/x-www-form-urlencoded",
+                    data: {
+                        username: username,
+                        password: password
+                    },
+                    //前端跨域请求解决方案
+                    xhrFields: {withCredentials: true},
+                    success: function (data) {
+                        if (data.status == "success") {
+                            alert("登录成功");
+                            window.location.href = "admin.html";
+                        } else {
+                            alert("登陆失败，原因为1" + data.data.errMsg);
+                        }
+                    },
+                    error: function (data) {
+                        alert("登陆失败，原因为2" + data.responseText);
+                    }
+                });
+                return false;
+            })
+        }
+    )
+
+</script>
+
+
+</html>
