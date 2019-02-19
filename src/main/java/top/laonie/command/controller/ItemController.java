@@ -35,6 +35,18 @@ public class ItemController extends BaseController {
     }
 
     /**
+     * 商品详情浏览
+     */
+    @RequestMapping(value = "/getitem", method = {RequestMethod.GET})
+    @ResponseBody
+    public CommonReturnType getItem(@RequestParam(name = "id") Integer id) {
+        ItemModel itemModel = itemService.getItemById(id);
+        //使用stream接口将list中的数据转化为itemVO
+        ItemVO itemVO = convertItemVOFromModel(itemModel);
+        return CommonReturnType.create(itemVO);
+    }
+
+    /**
      * 创建商品实体
      *
      * @param title

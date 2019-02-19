@@ -8,94 +8,62 @@
     <link href="../static/assets/admin/pages/css/login.css" rel="stylesheet" type="text/css">
     <script src="../static/assets/global/plugins/jquery-1.11.0.min.js"></script>
 </head>
-<body class="login">
+<body>
 <div class="content">
     <h3 class="form-title">商品列表</h3>
-    <div class="form-group">
-        <div class="form-group">
-            <label class="control-label">商品名称：</label>
-            <input type="text" name="title" id="title" placeholder="商品名称" class="form-control">
-        </div>
-        <div class="form-group">
-            <label class="control-label">价格：</label>
-            <input type="text" name="price" id="price" placeholder="价格" class="form-control">
-        </div>
-        <div class="form-group">
-            <label class="control-label">商品描述：</label>
-            <textarea name="description" id="description" placeholder="商品描述" class="form-control"></textarea>
-        </div>
-        <div class="form-group">
-            <label class="control-label">图片链接：</label>
-            <input type="text" name="imgUrl" id="imgUrl" placeholder="图片链接" class="form-control">
-        </div>
-        <div class="form-group">
-            <label class="control-label">库存：</label>
-            <input type="text" name="stock" id="stock" placeholder="库存" class="form-control">
-        </div>
-        <div class="form-actions">
-            <button class="btn blue" id="create" type="submit">添加商品</button>
-            <button class="btn blue" id="reset" type="reset">重置</button>
-        </div>
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>商品名称</th>
+                <th>商品图片</th>
+                <th>商品描述</th>
+                <th>商品价格</th>
+                <th>商品库存</th>
+                <th>商品销量</th>
+            </tr>
+            </thead>
+            <tbody id="container">
+            </tbody>
+        </table>
+
     </div>
 </div>
 </body>
+
 <script type="text/javascript">
+    //定义全局商品数组信息
+    var getItemList = [];
     jQuery(document).ready(function () {
-            //绑定getotp按钮的点击事件，发送获取短信验证码的请求
-            $("#create").on("click", function () {
-                var title = $("#title").val();
-                var price = $("#price").val();
-                var description = $("#description").val();
-                var imgUrl = $("#imgUrl").val();
-                var stock = $("#stock").val();
-                if (title == null || title == "") {
-                    alert("商品名不能为空！");
-                    return false;
+        $.ajax({
+            url: "http://localhost:8000/item/list",
+            type: "get",
+            //前端跨域请求解决方案
+            xhrFields: {withCredentials: true},
+            success: function (data) {
+                if (data.status == "success") {
+                    getItemList = data.data;
+                    reloadDom();
+                } else {
+                    alert("获取信息失败！" + data.data.errMsg);
                 }
-                if (price == null || price == "") {
-                    alert("价格不能为空！");
-                    return false;
-                }
-                if (stock == null || stock == "") {
-                    alert("库存不能为空！");
-                    return false;
-                }
-                if (description == null || description == "") {
-                    alert("商品描述不能为空！");
-                    return false;
-                }
-                if (imgUrl == null || imgUrl == "") {
-                    alert("图片链接不能为空！");
-                    return false;
-                }
-                $.ajax({
-                    url: "http://localhost:8000/item/create",
-                    type: "post",
-                    contentType: "application/x-www-form-urlencoded",
-                    data: {
-                        "title": title,
-                        "price": price,
-                        "description": description,
-                        "imgUrl": imgUrl,
-                        "stock": stock
-                    },
-                    //前端跨域请求解决方案
-                    xhrFields: {withCredentials: true},
-                    success: function (data) {
-                        if (data.status == "success") {
-                            alert("添加成功！")
-                        } else {
-                            alert("添加失败！" + data.data.errMsg);
-                        }
-                    },
-                    error: function (data) {
-                        alert("添加失败，原因为" + data.responseText);
-                    }
-                });
-                return false;
+            },
+            error: function (data) {
+                alert("获取信息失败，原因为" + data.responseText);
+            }
+        });
+    });
+
+    function reloadDom() {
+        for (var i = 0; i < getItemList.length; i++) {
+            var itemVO = getItemList[i];
+            var dom = "<tr data-id='" + itemVO.id + "' id='itemDetail" + itemVO.id + "'><td>" + itemVO.title + "</td><td>" + itemVO.title + "</td><td><img style='width: 100px;height: auto' src='" + itemVO.imgUrl + "'></td><td>" + itemVO.description +
+                "</td><td>" + itemVO.price + "</td><td>" + itemVO.stock + "</td><td>" + itemVO.sales + "</td></tr>";
+            $("#container").append($(dom));
+            $("#itemDetail" + itemVO.id).on("click", function (e) {
+                window.location.href = "getitem.html?id=" + $(this).data("id");
             })
         }
-    )
-
+    }
 </script>
 </html>

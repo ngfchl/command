@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>商品详情</title>
+    <link href="../static/assets/global/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="../static/assets/global/css/components.css" rel="stylesheet" type="text/css">
+    <link href="../static/assets/admin/pages/css/login.css" rel="stylesheet" type="text/css">
+    <script src="../static/assets/global/plugins/jquery-1.11.0.min.js"></script>
+</head>
+<body class="login">
+<div class="content">
+    <h3 class="form-title">添加商品</h3>
+    <div class="form-group">
+        <div class="form-group">
+            <label class="control-label">商品名称：</label>
+            <label id="title" class="control-label"></label>
+        </div>
+        <div class="form-group">
+            <label class="control-label">价格：</label>
+            <label id="price" class="control-label"></label>
+        </div>
+        <div class="form-group">
+            <label class="control-label">商品描述：</label>
+            <label id="description" class="control-label"></label>
+        </div>
+        <div class="form-group">
+            <img id="imgUrl" class="control-label" src="" style="width: 150px;height: auto">
+        </div>
+        <div class="form-group">
+            <label class="control-label">库存：</label>
+            <label id="stock" class="control-label"></label>
+        </div>
+        <div class="form-group">
+            <label class="control-label">销量：</label>
+            <label id="sales" class="control-label"></label>
+        </div>
+        <!--<div class="form-actions">-->
+        <!--<button class="btn blue" id="create" type="submit">添加商品</button>-->
+        <!--<button class="btn blue" id="reset" type="reset">重置</button>-->
+        <!--</div>-->
+    </div>
+</div>
+</body>
+<script type="text/javascript">
+    function getParam(paramName) {
+        paramValue = "", isFound = !1;
+        if (this.location.search.indexOf("?") == 0 && this.location.search.indexOf("=") > 1) {
+            arrSource = unescape(this.location.search).substring(1, this.location.search.length).split("&"), i = 0;
+            while (i < arrSource.length && !isFound) arrSource[i].indexOf("=") > 0 && arrSource[i].split("=")[0].toLowerCase() == paramName.toLowerCase() && (paramValue = arrSource[i].split("=")[1], isFound = !0), i++
+        }
+        return paramValue == "" && (paramValue = null), paramValue;
+    }
+
+    var getItemList = [];
+
+    jQuery(document).ready(function () {
+        $.ajax({
+            url: "http://localhost:8000/item/getitem",
+            type: "get",
+            data: {
+                "id": getParam("id")
+            },
+            //前端跨域请求解决方案
+            xhrFields: {withCredentials: true},
+            success: function (data) {
+                if (data.status == "success") {
+                    getItemList = data.data;
+                    reloadDom();
+                } else {
+                    alert("获取商品详情失败！" + data.data.errMsg);
+                }
+            },
+            error: function (data) {
+                alert("获取商品详情失败，原因为" + data.responseText);
+            }
+        });
+        return false;
+    });
+
+    function reloadDom() {
+        $("#title").text(getItemList.title);
+        $("#price").text(getItemList.price);
+        $("#description").text(getItemList.description);
+        $("#imgUrl").attr("src", getItemList.imgUrl);
+        $("#stock").text(getItemList.stock);
+        $("#sales").text(getItemList.sales);
+    }
+
+</script>
+</html>
