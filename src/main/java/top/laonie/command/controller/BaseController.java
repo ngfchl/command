@@ -15,7 +15,7 @@ import java.util.Map;
 public class BaseController {
 
     //将数据传输方式定义为常量
-    public static final String CONTENT_TYPE_FOMED = "application/x-www-form-urlencoded";
+    static final String CONTENT_TYPE = "application/x-www-form-urlencoded";
 
     /**
      * 定义exceptionhandler解决未被controller层吸收的异常
@@ -35,8 +35,8 @@ public class BaseController {
             responseData.put("errCode", businessException.getErrCode());
             responseData.put("errMsg", businessException.getErrMsg());
         } else {
-            responseData.put("errCode", EmbusinessError.UNKNOW_ERROR.getErrCode());
-            responseData.put("errMsg", EmbusinessError.UNKNOW_ERROR.getErrMsg());
+            responseData.put("errCode", EmbusinessError.UNKNOWN_ERROR.getErrCode());
+            responseData.put("errMsg", EmbusinessError.UNKNOWN_ERROR.getErrMsg());
         }
         return CommonReturnType.create(responseData, "fail");
     }

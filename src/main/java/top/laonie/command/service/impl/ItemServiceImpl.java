@@ -82,12 +82,10 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public List<ItemModel> listItem() {
         List<ItemDO> itemDOList = itemDOMapper.listItem();
-        List<ItemModel> itemModelList = itemDOList.stream().map(itemDO -> {
+        return itemDOList.stream().map(itemDO -> {
             ItemStockDO itemStockDO = itemStockDOMapper.selectByItemId(itemDO.getId());
-            ItemModel itemModel = this.convertModelFromDataObject(itemDO, itemStockDO);
-            return itemModel;
+            return this.convertModelFromDataObject(itemDO, itemStockDO);
         }).collect(Collectors.toList());
-        return itemModelList;
     }
 
     /**

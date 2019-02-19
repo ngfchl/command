@@ -38,7 +38,7 @@ public class UserController extends BaseController {
      * @param password
      * @return
      */
-    @RequestMapping(value = "/login", method = RequestMethod.POST, consumes = CONTENT_TYPE_FOMED)
+    @RequestMapping(value = "/login", method = RequestMethod.POST, consumes = CONTENT_TYPE)
     @ResponseBody
     public CommonReturnType login(@RequestParam(name = "username") String username,
                                   @RequestParam(name = "password") String password) throws BusinessException, UnsupportedEncodingException, NoSuchAlgorithmException {
@@ -57,7 +57,7 @@ public class UserController extends BaseController {
     /**
      * 用户注册接口
      */
-    @RequestMapping(value = "/register", method = RequestMethod.POST, consumes = CONTENT_TYPE_FOMED)
+    @RequestMapping(value = "/register", method = RequestMethod.POST, consumes = CONTENT_TYPE)
     @ResponseBody
     public CommonReturnType register(@RequestParam(name = "telphone") String telphone,
                                      @RequestParam(name = "otpCode") String otpCode,
@@ -85,7 +85,7 @@ public class UserController extends BaseController {
     }
 
     //    MD5加密方法
-    public String encodeByMd5(String str) throws UnsupportedEncodingException, NoSuchAlgorithmException {
+    private String encodeByMd5(String str) throws UnsupportedEncodingException, NoSuchAlgorithmException {
         //确定计算方法
         MessageDigest md5 = MessageDigest.getInstance("MD5");
         BASE64Encoder base64Encoder = new BASE64Encoder();
@@ -99,15 +99,15 @@ public class UserController extends BaseController {
      *
      * @return
      */
-    @RequestMapping(value = "/getotp", method = RequestMethod.POST, consumes = CONTENT_TYPE_FOMED)
+    @RequestMapping(value = "/getotp", method = RequestMethod.POST, consumes = CONTENT_TYPE)
     @ResponseBody
     public CommonReturnType getOtp(@RequestParam("telphone") String telphone) {
         //需要按照一定的规则生成OTP验证码
         Random random = new Random();
-        int randromInt = random.nextInt(99999);
-        randromInt += 10000;
+        int randomInt = random.nextInt(99999);
+        randomInt += 10000;
         //数字转为字符串
-        String otpCode = String.valueOf(randromInt);
+        String otpCode = String.valueOf(randomInt);
         //将验证码与手机号关联,使用HTTPSession的方式绑定
         httpServletRequest.getSession().setAttribute(telphone, otpCode);
 

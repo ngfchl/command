@@ -25,15 +25,12 @@ public class ItemController extends BaseController {
     /**
      * 商品列表浏览
      */
-    @RequestMapping(value = "/listitem", method = RequestMethod.GET)
+    @RequestMapping(value = "/list", method = {RequestMethod.GET})
     @ResponseBody
     public CommonReturnType listItem() {
         List<ItemModel> itemModelList = itemService.listItem();
         //使用stream接口将list中的数据转化为itemVO
-        List<ItemVO> itemVOList = itemModelList.stream().map(itemModel -> {
-            ItemVO itemVO = this.convertItemVOFromModel(itemModel);
-            return itemVO;
-        }).collect(Collectors.toList());
+        List<ItemVO> itemVOList = itemModelList.stream().map(this::convertItemVOFromModel).collect(Collectors.toList());
         return CommonReturnType.create(itemVOList);
     }
 
@@ -47,7 +44,7 @@ public class ItemController extends BaseController {
      * @param imgUrl
      * @return
      */
-    @RequestMapping(value = "/create", method = RequestMethod.POST, consumes = CONTENT_TYPE_FOMED)
+    @RequestMapping(value = "/create", method = RequestMethod.POST, consumes = CONTENT_TYPE)
     @ResponseBody
     public CommonReturnType createItem(@RequestParam(name = "title") String title,
                                        @RequestParam(name = "price") BigDecimal price,

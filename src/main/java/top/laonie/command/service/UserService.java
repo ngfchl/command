@@ -19,8 +19,8 @@ public interface UserService {
     /**
      * 用户登录接口！
      *
-     * @param telphone
+     * @param username
      * @param encrptPassword
      */
-    UserModel checkLogin(String telphone, String encrptPassword) throws BusinessException;
+    UserModel checkLogin(String username, String encrptPassword) throws BusinessException;
 }

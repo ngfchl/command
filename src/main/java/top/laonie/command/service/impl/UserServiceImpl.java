@@ -61,7 +61,7 @@ public class UserServiceImpl implements UserService {
             throw new BusinessException(EmbusinessError.PARAMETER_VALIDATION_ERROR, "用户名或手机号已被注册！");
         }
         userModel.setId(userDO.getId());
-        UserPasswordDO userPasswordDO = converPasswordFromModel(userModel);
+        UserPasswordDO userPasswordDO = convertPasswordFromModel(userModel);
         userPasswordDOMapper.insertSelective(userPasswordDO);
 
         return;
@@ -81,17 +81,21 @@ public class UserServiceImpl implements UserService {
         if (userDO == null) {
             throw new BusinessException(EmbusinessError.USER_LOGIN_FAIL);
         }
+        //获取密码信息
         UserPasswordDO userPasswordDO = userPasswordDOMapper.selectByUserId(userDO.getId());
+        if (userPasswordDO == null) {
+            throw new BusinessException(EmbusinessError.USER_LOGIN_FAIL);
+        }
         UserModel userModel = convertFromDataObject(userDO, userPasswordDO);
         //  比对获取的密码是否匹配
-        if (StringUtils.equals(encrptPassword, userModel.getEncrptPassword())) {
+        if (!StringUtils.equals(encrptPassword, userModel != null ? userModel.getEncrptPassword() : null)) {
             throw new BusinessException(EmbusinessError.USER_LOGIN_FAIL);
         }
         return userModel;
     }
 
     //从UserModel中提取UserPassword所需信息
-    private UserPasswordDO converPasswordFromModel(UserModel userModel) {
+    private UserPasswordDO convertPasswordFromModel(UserModel userModel) {
         if (userModel == null) {
             return null;
         }
