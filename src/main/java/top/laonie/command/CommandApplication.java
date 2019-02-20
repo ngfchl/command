@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import top.laonie.command.dao.UserDOMapper;
 import top.laonie.command.dataobject.UserDO;
 
-@SpringBootApplication(scanBasePackages = {"top.laonie.command"})
+@SpringBootApplication(scanBasePackages = {"top.laonie.command", "top.laonie.command.service"})
 @RestController
 @MapperScan("top.laonie.command.dao")
 public class CommandApplication {

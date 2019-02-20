@@ -1,5 +1,6 @@
 package top.laonie.command.dao;
 
+import org.apache.ibatis.annotations.Param;
 import top.laonie.command.dataobject.ItemStockDO;
 
 public interface ItemStockDOMapper {
@@ -16,4 +17,6 @@ public interface ItemStockDOMapper {
     int updateByPrimaryKeySelective(ItemStockDO record);
 
     int updateByPrimaryKey(ItemStockDO record);
+
+    int decreaseStock(@Param("itemId") Integer itemId, @Param("amount") Integer amount);
 }

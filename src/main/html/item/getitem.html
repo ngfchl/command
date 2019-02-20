@@ -35,10 +35,10 @@
             <label class="control-label">销量：</label>
             <label id="sales" class="control-label"></label>
         </div>
-        <!--<div class="form-actions">-->
-        <!--<button class="btn blue" id="create" type="submit">添加商品</button>-->
-        <!--<button class="btn blue" id="reset" type="reset">重置</button>-->
-        <!--</div>-->
+        <div class="form-actions">
+            <button class="btn blue" id="createorder" type="submit">下单</button>
+            <!--<button class="btn blue" id="reset" type="reset">重置</button>-->
+        </div>
     </div>
 </div>
 </body>
@@ -52,9 +52,10 @@
         return paramValue == "" && (paramValue = null), paramValue;
     }
 
-    var getItemList = [];
+    var getItem = [];
 
     jQuery(document).ready(function () {
+
         $.ajax({
             url: "http://localhost:8000/item/getitem",
             type: "get",
@@ -65,7 +66,7 @@
             xhrFields: {withCredentials: true},
             success: function (data) {
                 if (data.status == "success") {
-                    getItemList = data.data;
+                    getItem = data.data;
                     reloadDom();
                 } else {
                     alert("获取商品详情失败！" + data.data.errMsg);
@@ -77,14 +78,43 @@
         });
         return false;
     });
+    $("#createorder").on("click", function () {
+        $.ajax({
+            url: "http://localhost:8000/order/create",
+            type: "post",
+            contentType: "application/x-www-form-urlencoded",
+            data: {
+                itemId: getItem.id,
+                amount: 1
+            },
+            //前端跨域请求解决方案
+            xhrFields: {
+                withCredentials: true
+            },
+            success: function (data) {
+                if (data.status == "success") {
+                    alert("下单成功！")
+                } else {
+                    alert("下单失败！" + data.data.errMsg);
+                    if (data.data.errCode == 20003) {
+                        window.location.href = "../user/login.html";
+                    }
+                }
+            },
+            error: function (data) {
+                alert("购买失败，原因为" + data.responseText);
+            }
+        });
+        return false;
+    });
 
     function reloadDom() {
-        $("#title").text(getItemList.title);
-        $("#price").text(getItemList.price);
-        $("#description").text(getItemList.description);
-        $("#imgUrl").attr("src", getItemList.imgUrl);
-        $("#stock").text(getItemList.stock);
-        $("#sales").text(getItemList.sales);
+        $("#title").text(getItem.title);
+        $("#price").text(getItem.price);
+        $("#description").text(getItem.description);
+        $("#imgUrl").attr("src", getItem.imgUrl);
+        $("#stock").text(getItem.stock);
+        $("#sales").text(getItem.sales);
     }
 
 </script>

@@ -50,7 +50,7 @@ public class UserController extends BaseController {
         UserModel userModel = userService.checkLogin(username, this.encodeByMd5(password));
         //设置session
         this.httpServletRequest.getSession().setAttribute("IS_LOGIN", true);
-        this.httpServletRequest.getSession().setAttribute("username", userModel.getUsername());
+        this.httpServletRequest.getSession().setAttribute("LOGIN_USER", userModel);
         return CommonReturnType.create(null);
     }
 

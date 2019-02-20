@@ -74,6 +74,7 @@ public class ItemServiceImpl implements ItemService {
         return itemStockDO;
     }
 
+
     /**
      * 商品列表
      *
@@ -110,5 +111,21 @@ public class ItemServiceImpl implements ItemService {
         itemModel.setPrice(new BigDecimal(itemDO.getPrice()));
         itemModel.setStock(itemStockDO.getStock());
         return itemModel;
+    }
+
+    /**
+     * 更新库存
+     *
+     * @param itemId
+     * @param amount
+     * @return
+     */
+    @Override
+    @Transactional
+    public boolean decreaseStock(Integer itemId, Integer amount) throws BusinessException{
+        if (itemStockDOMapper.decreaseStock(itemId, amount) > 0) {
+            return true;
+        }
+        return false;
     }
 }
