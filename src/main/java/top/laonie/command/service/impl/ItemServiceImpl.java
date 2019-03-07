@@ -122,10 +122,11 @@ public class ItemServiceImpl implements ItemService {
      */
     @Override
     @Transactional
-    public boolean decreaseStock(Integer itemId, Integer amount) throws BusinessException{
+    public boolean decreaseStock(Integer itemId, Integer amount) {
         if (itemStockDOMapper.decreaseStock(itemId, amount) > 0) {
             return true;
+        } else {
+            return false;
         }
-        return false;
     }
 }

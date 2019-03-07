@@ -28,12 +28,12 @@ public class OrderController extends BaseController {
     public CommonReturnType createOrder(@RequestParam(name = "itemId") Integer itemId, @RequestParam("amount") Integer amount) throws BusinessException {
         //获取用户登录信息
         Boolean is_Login = (Boolean) httpServletRequest.getSession().getAttribute("IS_LOGIN");
-        if (is_Login == null || !is_Login.booleanValue()) {
+        if (is_Login == null || !is_Login) {
             throw new BusinessException(USER_NOT_LOGIN);
         }
         UserModel userModel = (UserModel) httpServletRequest.getSession().getAttribute("LOGIN_USER");
         OrderModel orderModel = orderService.createOrder(userModel.getId(), itemId, amount);
 
-        return CommonReturnType.create(orderModel);
+        return CommonReturnType.create(null);
     }
 }

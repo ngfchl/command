@@ -15,7 +15,7 @@
     from sequence_info
     where name = #{name,jdbcType=VARCHAR}
   </select>
-    <select id="getSequuenceByName" parameterType="java.lang.String" resultMap="BaseResultMap">
+    <select id="getSequenceByName" parameterType="java.lang.String" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from sequence_info

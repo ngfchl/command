@@ -9,7 +9,7 @@ public interface SequenceDOMapper {
 
     int insertSelective(SequenceDO record);
 
-    SequenceDO getSequuenceByName(String name);
+    SequenceDO getSequenceByName(String name);
 
     SequenceDO selectByPrimaryKey(String name);
 

@@ -30,7 +30,7 @@
       #{itemPrice,jdbcType=DOUBLE}, #{amount,jdbcType=INTEGER}, #{orderPrice,jdbcType=DOUBLE}
       )
   </insert>
-    <insert id="insertSelective" parameterType="top.laonie.command.dataobject.OrderDO">
+    <insert id="insertSelective">
         insert into order_info
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">

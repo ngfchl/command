@@ -52,7 +52,7 @@
         return paramValue == "" && (paramValue = null), paramValue;
     }
 
-    var getItem = [];
+    var getItemVO = [];
 
     jQuery(document).ready(function () {
 
@@ -66,7 +66,7 @@
             xhrFields: {withCredentials: true},
             success: function (data) {
                 if (data.status == "success") {
-                    getItem = data.data;
+                    getItemVO = data.data;
                     reloadDom();
                 } else {
                     alert("获取商品详情失败！" + data.data.errMsg);
@@ -84,7 +84,7 @@
             type: "post",
             contentType: "application/x-www-form-urlencoded",
             data: {
-                itemId: getItem.id,
+                itemId: getItemVO.id,
                 amount: 1
             },
             //前端跨域请求解决方案
@@ -109,12 +109,12 @@
     });
 
     function reloadDom() {
-        $("#title").text(getItem.title);
-        $("#price").text(getItem.price);
-        $("#description").text(getItem.description);
-        $("#imgUrl").attr("src", getItem.imgUrl);
-        $("#stock").text(getItem.stock);
-        $("#sales").text(getItem.sales);
+        $("#title").text(getItemVO.title);
+        $("#price").text(getItemVO.price);
+        $("#description").text(getItemVO.description);
+        $("#imgUrl").attr("src", getItemVO.imgUrl);
+        $("#stock").text(getItemVO.stock);
+        $("#sales").text(getItemVO.sales);
     }
 
 </script>

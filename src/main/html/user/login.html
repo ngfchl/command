@@ -28,6 +28,9 @@
 </div>
 </body>
 <script type="text/javascript">
+    //获取页面来源地址，也就是上一页地址
+    var prevLink = document.referrer;
+
     jQuery(document).ready(function () {
             $("#register").on("click", function () {
                 window.location.href = "getotp.html";
@@ -57,7 +60,22 @@
                     success: function (data) {
                         if (data.status == "success") {
                             alert("登录成功");
-                            window.location.href = "../item/listitem.html";
+
+                            /**
+                             * 如果页面来源为空，直接跳转到默认页面，如果来自其他站点，跳转到本站首页，
+                             * 如果来自本站，直接返回上一页
+                             */
+                            if ($.trim(prevLink) == '') {
+                                window.location.href = "../item/listitem.html";
+                            } else {
+                                if (prevLink.indexOf('http://localhost:8000') == -1) {	//来自其它站点
+                                    window.location.href = 'http://localhost:8000';
+                                }
+                                // if(prevLink.indexOf('http://localhost:8000')!=-1){		//来自注册页面
+                                //     window.location.href = 'www.example.com/index.html';
+                                // }
+                                window.location.href = prevLink;
+                            }
                         } else {
                             alert("登陆失败，原因为1" + data.data.errMsg);
                         }

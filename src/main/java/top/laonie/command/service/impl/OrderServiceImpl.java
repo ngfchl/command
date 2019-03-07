@@ -71,6 +71,7 @@ public class OrderServiceImpl implements OrderService {
         //生成交易订单号码
         orderModel.setId(generateOrderNo());
         OrderDO orderDO = convertFromOrderModel(orderModel);
+//        System.out.println(orderDO);
         orderDOMapper.insertSelective(orderDO);
         //返回前端
         return orderModel;
@@ -109,7 +110,7 @@ public class OrderServiceImpl implements OrderService {
         //  中间六位为自增序列
         int sequence = 0;
         //从自增序列表中获取默认值
-        SequenceDO sequenceDO = sequenceDOMapper.getSequuenceByName("order_info");
+        SequenceDO sequenceDO = sequenceDOMapper.getSequenceByName("order_info");
         //默认值赋给自增序列
         sequence = sequenceDO.getCurrentValue();
         //自增序列加上自己的步长后更新数据库
